@@ -1,14 +1,15 @@
 # DSA & Leetcode Journey
 
-This repository contains y solutions , notes, and explainations for DSA and LeetCode problems.
+This repository contains solutions , notes, and explainations for DSA and LeetCode problems.
 
 ## Language:
+
 -- Python
 
-Focus Areas:
+### Focus Areas:
 
--- Arrays
--- Hashmaps
--- Sliding Window
--- Trees
--- Graphs
+- Arrays
+- Hashmaps
+- Sliding Window
+- Trees
+- Graphs
