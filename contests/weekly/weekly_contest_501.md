@@ -1,24 +1,33 @@
-# Weekly Contest 501
+# 🚀 LeetCode Weekly Contest 501
 
-# Problem 1 — Concatenate Array With Reverse
-
-## Difficulty
-Easy
+> My first serious LeetCode Weekly Contest journey 🔥  
+> Solved with Python 🐍
 
 ---
 
-# Problem Statement
+# 🏆 Problems Solved
 
-We are given an array called `nums`.
+| Problem | Difficulty | Status |
+|---|---|---|
+| Concatenate Array With Reverse | Easy 🟢 | ✅ Solved |
+| Count Valid Word Occurrences | Medium 🟡 | ✅ Solved |
+
+---
+
+# 🧩 Problem 1 — Concatenate Array With Reverse
+
+## 📄 Problem Statement
+
+We are given an integer array called `nums`.
 
 We need to create a NEW array where:
 
 - first half = original array
-- second half = reversed array
+- second half = reversed version of the same array
 
 ---
 
-# Example
+# 🧠 Example
 
 ## Input
 
@@ -34,66 +43,27 @@ nums = [1,2,3]
 
 ---
 
-# My Understanding
+# 🐶 Simple Explanation (Golden Retriever Mode)
 
-The problem is NOT asking to only reverse the array.
-
-Instead:
-
-1. Keep the original array
-2. Reverse the same array
-3. Attach the reversed array to the original one
-4. Return the final combined array
-
-So basically:
-
-```python
-original array + reversed array
-```
-
----
-
-# Step-by-Step Thinking
-
-Suppose:
-
-```python
-nums = [1,2,3]
-```
-
----
-
-## Step 1 — Original Array
+Imagine you have:
 
 ```python
 [1,2,3]
 ```
 
----
+Now:
 
-## Step 2 — Reverse the Array
+1. Keep the original array
+2. Flip it backwards
+3. Attach it to the end
 
-Using:
-
-```python
-nums[::-1]
-```
-
-We get:
-
-```python
-[3,2,1]
-```
-
----
-
-## Step 3 — Combine Both Arrays
+Like this:
 
 ```python
 [1,2,3] + [3,2,1]
 ```
 
-Final Answer:
+Final answer:
 
 ```python
 [1,2,3,3,2,1]
@@ -101,7 +71,40 @@ Final Answer:
 
 ---
 
-# Full Code
+# 💡 Main Concept Used
+
+## Python Slicing
+
+```python
+nums[::-1]
+```
+
+This reverses the array.
+
+---
+
+# 🧠 Why?
+
+Python slicing format:
+
+```python
+[start : end : step]
+```
+
+Using:
+
+```python
+[::-1]
+```
+
+means:
+- start from end
+- move backwards
+- reverse everything
+
+---
+
+# ✅ Final Code
 
 ```python
 class Solution:
@@ -114,179 +117,364 @@ class Solution:
 
 ---
 
-# Full Code Explanation
+# ⏱️ Time Complexity
 
-## Line 1
+```text
+O(n)
+```
+
+Because we traverse the array once.
+
+---
+
+# 📦 Space Complexity
+
+```text
+O(n)
+```
+
+Because we create a new array.
+
+---
+
+---
+
+# 🧩 Problem 2 — Count Valid Word Occurrences
+
+## 📄 Problem Statement
+
+We are given:
+
+- an array of string chunks
+- an array of queries
+
+First:
+- combine all chunks into ONE string
+
+Then:
+- extract valid words carefully
+
+Finally:
+- count how many times each query appears as a FULL word
+
+---
+
+# 🧠 Example
+
+## Input
+
+```python
+chunks = ["hello wor","ld hello"]
+queries = ["hello","world","wor"]
+```
+
+After joining:
+
+```python
+"hello world hello"
+```
+
+Valid words:
+
+```python
+["hello", "world", "hello"]
+```
+
+Result:
+
+```python
+[2,1,0]
+```
+
+Because:
+- `"hello"` appears 2 times
+- `"world"` appears 1 time
+- `"wor"` is NOT a full word
+
+---
+
+# ⚠️ Important Hyphen Rule
+
+A hyphen `-` is valid ONLY IF:
+
+```text
+letter - letter
+```
+
+Example:
+
+## ✅ Valid
+
+```python
+a-b
+```
+
+This becomes ONE word.
+
+---
+
+## ❌ Invalid
+
+```python
+a--b
+```
+
+This becomes:
+
+```python
+a
+b
+```
+
+because double hyphen breaks the word.
+
+---
+
+# 🐶 Simple Explanation
+
+Think of the program like reading a sentence letter by letter.
+
+It builds words slowly:
+
+```python
+h → he → hel → hello
+```
+
+When:
+- space appears
+- invalid hyphen appears
+
+the word ends and gets stored.
+
+---
+
+# 💡 Main Concepts Used
+
+- String traversal
+- Conditions
+- Hashmaps / dictionaries
+- Parsing
+- Edge case handling
+
+---
+
+# ✅ Final Code
 
 ```python
 class Solution:
-```
+    def countWordOccurrences(self, chunks: list[str], queries: list[str]) -> list[int]:
 
-LeetCode already expects our solution inside a class called `Solution`.
+        # Join all chunks into one string
+        s = "".join(chunks)
+
+        # Store extracted words
+        words = []
+
+        # Current word being built
+        current = ""
+
+        # Traverse character by character
+        for i in range(len(s)):
+
+            ch = s[i]
+
+            # Case 1: Letter
+            if ch.isalpha():
+
+                current += ch
+
+            # Case 2: Hyphen
+            elif ch == "-":
+
+                # Valid joiner hyphen
+                if (
+                    i > 0
+                    and i < len(s) - 1
+                    and s[i - 1].islower()
+                    and s[i + 1].islower()
+                ):
+
+                    current += ch
+
+                # Invalid hyphen
+                else:
+
+                    if current:
+                        words.append(current)
+
+                    current = ""
+
+            # Case 3: Separators / spaces
+            else:
+
+                if current:
+                    words.append(current)
+
+                current = ""
+
+        # Add last word if remaining
+        if current:
+            words.append(current)
+
+        # Count frequencies
+        freq = {}
+
+        for word in words:
+
+            if word in freq:
+                freq[word] += 1
+
+            else:
+                freq[word] = 1
+
+        # Build final answer
+        ans = []
+
+        for q in queries:
+
+            if q in freq:
+                ans.append(freq[q])
+
+            else:
+                ans.append(0)
+
+        return ans
+```
 
 ---
 
-## Line 2
+# 🧠 Full Logic Breakdown
+
+## Step 1 — Join All Strings
 
 ```python
-def concatWithReverse(self, nums: list[int]) -> list[int]:
+s = "".join(chunks)
 ```
-
-This creates the function.
-
-### Parameters
-
-```python
-nums
-```
-
-The input array.
-
----
-
-## Return Type
-
-```python
--> list[int]
-```
-
-Means the function returns a list of integers.
-
----
-
-# Main Logic
-
-## This Line
-
-```python
-ans = nums + nums[::-1]
-```
-
-This is the most important line.
-
----
-
-# First Part
-
-```python
-nums
-```
-
-Gives the original array.
 
 Example:
 
 ```python
-[1,2,3]
+["hello wor","ld hello"]
+```
+
+becomes:
+
+```python
+"hello world hello"
 ```
 
 ---
 
-# Second Part
+# Step 2 — Build Words
+
+We scan every character.
+
+If it is:
+- letter → add to current word
+- valid hyphen → add to current word
+- separator → word ends
+
+---
+
+# Step 3 — Store Words
+
+Example final words:
 
 ```python
-nums[::-1]
-```
-
-Reverses the array.
-
-Example:
-
-```python
-[3,2,1]
+["hello", "world", "hello"]
 ```
 
 ---
 
-# Then `+`
+# Step 4 — Count Frequencies
 
-The `+` operator combines both arrays.
-
-So:
+Using hashmap:
 
 ```python
-[1,2,3] + [3,2,1]
-```
-
-Becomes:
-
-```python
-[1,2,3,3,2,1]
+{
+   "hello":2,
+   "world":1
+}
 ```
 
 ---
 
-# Final Return
+# Step 5 — Answer Queries
 
-```python
-return ans
-```
-
-Returns the final array.
+For every query:
+- if exists → append count
+- else → append 0
 
 ---
 
-# Understanding `nums[::-1]`
+# ⏱️ Time Complexity
 
-Python slicing format:
-
-```python
-[start : end : step]
+```text
+O(n)
 ```
 
-Here:
-
-```python
-[::-1]
-```
-
-Means:
-- start from end
-- move backwards
-- step = `-1`
-
-That is why the array gets reversed.
+Where:
+- `n` = total characters
 
 ---
 
-# Time Complexity
+# 📦 Space Complexity
 
 ```text
 O(n)
 ```
 
 Because:
-- Python traverses the array once to reverse it.
+- storing words
+- storing hashmap
 
 ---
 
-# Space Complexity
+# 🏆 What I Learned From This Contest
 
-```text
-O(n)
-```
-
-Because:
-- we create a new array.
-
----
-
-# What I Learned
-
-- Array concatenation
-- Python slicing
-- Reversing arrays
-- Creating new arrays
-- Returning transformed arrays
-- Breaking problems into smaller logical steps
+✅ Arrays  
+✅ Python slicing  
+✅ Reversing arrays  
+✅ String traversal  
+✅ Hashmaps  
+✅ Parsing  
+✅ Debugging  
+✅ Edge cases  
+✅ Contest-style thinking  
 
 ---
 
-# Contest Notes
+# 🔥 Biggest Lesson
 
-This was my first LeetCode Weekly Contest problem.
+The hardest part is NOT syntax.
 
-Main lesson:
-- Understand the problem first
-- Break it into steps
-- Then write the cleanest possible solution
+The hardest part is:
+- understanding the problem
+- breaking it into steps
+- thinking logically
+
+---
+
+# 🚀 Contest Progress
+
+| Problem | Result |
+|---|---|
+| Q1 | ✅ Solved |
+| Q2 | ✅ Solved |
+| Q3 | ⚡ Learned optimization & time complexity concepts |
+
+---
+
+# 🐍 Built With
+
+- Python 3
+- LeetCode
+- Lots of debugging 😂
+
+---
+
+# ⭐ Final Note
+
+This contest taught me:
+> Good programmers don't just write code.  
+> They understand the logic behind the code.
